@@ -20,6 +20,11 @@ let players = [
 
 const MAX_PER_GAME = 3;
 const MIN_PER_GAME = 2;
+const NUM_GOALIES = 1;
+const NUM_DEFENDERS = 3;
+const NUM_MIDFIELDERS = 2;
+const NUM_FORWARDS = 1;
+
 
 function pickPlayer(players, index, alreadyChosen) {
     let pool = players.filter(p => !alreadyChosen.includes(p[0]));
@@ -65,10 +70,10 @@ function createLineup(players) {
             }
         }
 
-        addSpot(1, "Goalie", 1);
-        addSpot(2, "Defender", 3);
-        addSpot(3, "Midfielder", 2);
-        addSpot(4, "Forward", 1);
+        addSpot(1, "Goalie", NUM_GOALIES);
+        addSpot(2, "Defender", NUM_DEFENDERS);
+        addSpot(3, "Midfielder", NUM_MIDFIELDERS);
+        addSpot(4, "Forward", NUM_FORWARDS);
 
         // fill with subs (ensures 11 players listed per quarter)
         while (quarterLineup.length < playersCopy.length) {
