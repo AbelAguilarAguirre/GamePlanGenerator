@@ -247,7 +247,9 @@ export default function SoccerLineupGenerator() {
                             </span>
                             <input
                                 type="number"
-                                className="border p-1 text-center"
+                                inputMode="numeric"
+                                pattern="[0-9]*"
+                                className="border p-2 w-20 sm:w-16 text-center rounded"
                                 value={value}
                                 onChange={(e) =>
                                     setSettings({
@@ -312,6 +314,9 @@ export default function SoccerLineupGenerator() {
                                 >
                                     <td className="p-2 text-center text-sm sm:text-base border-r">
                                         <input
+                                            type="text"
+                                            inputMode="text"
+                                            autoComplete="off"
                                             className="border p-1 w-25 sm:w-30 text-center"
                                             value={p.name}
                                             onChange={(e) => {
@@ -325,7 +330,9 @@ export default function SoccerLineupGenerator() {
                                     <td className="p-2 text-center text-sm sm:text-base border-r">
                                         <input
                                             type="number"
-                                            className="border p-1 w-12 sm:w-16 text-center"
+                                            inputMode="numeric"
+                                            pattern="[0-9]*"
+                                            className="border p-2 w-20 sm:w-16 text-center rounded"
                                             value={p.goalieCount}
                                             onChange={(e) => {
                                                 const val = Math.max(
@@ -342,7 +349,9 @@ export default function SoccerLineupGenerator() {
                                     <td className="p-2 text-center text-sm sm:text-base border-r">
                                         <input
                                             type="number"
-                                            className="border p-1 w-12 sm:w-16 text-center"
+                                            inputMode="numeric"
+                                            pattern="[0-9]*"
+                                            className="border p-2 w-20 sm:w-16 text-center rounded"
                                             value={p.defenderCount}
                                             onChange={(e) => {
                                                 const val = Math.max(
@@ -360,7 +369,9 @@ export default function SoccerLineupGenerator() {
                                     <td className="p-2 text-center text-sm sm:text-base border-r">
                                         <input
                                             type="number"
-                                            className="border p-1 w-12 sm:w-16 text-center"
+                                            inputMode="numeric"
+                                            pattern="[0-9]*"
+                                            className="border p-2 w-20 sm:w-16 text-center rounded"
                                             value={p.midfielderCount}
                                             onChange={(e) => {
                                                 const val = Math.max(
@@ -378,7 +389,9 @@ export default function SoccerLineupGenerator() {
                                     <td className="p-2 text-center text-sm sm:text-base border-r">
                                         <input
                                             type="number"
-                                            className="border p-1 w-12 sm:w-16 text-center"
+                                            inputMode="numeric"
+                                            pattern="[0-9]*"
+                                            className="border p-2 w-20 sm:w-16 text-center rounded"
                                             value={p.forwardCount}
                                             onChange={(e) => {
                                                 const val = Math.max(
