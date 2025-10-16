@@ -293,7 +293,9 @@ export default function SoccerLineupGenerator() {
                 </button>
                 {showInstructions && (
                     <ol className="list-decimal list-inside space-y-1 mt-2 text-sm">
-                        <li>Enter each player's name in the text input.</li>
+                        <li>
+                            Enter each player&apos;s name in the text input.
+                        </li>
                         <li>
                             Set the number of quarters the player has played in
                             each position (Goalie, Defender, Midfielder,
@@ -301,7 +303,7 @@ export default function SoccerLineupGenerator() {
                         </li>
                         <li>
                             Use the <strong>Active</strong> checkbox to include
-                            or exclude players from this game's lineup.
+                            or exclude players from this game&apos;s lineup.
                         </li>
                         <li>
                             Click <strong>+ Add Player</strong> to add more
