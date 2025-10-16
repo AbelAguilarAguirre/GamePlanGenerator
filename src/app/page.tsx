@@ -369,6 +369,8 @@ export default function SoccerLineupGenerator() {
                                 </label>
                                 <input
                                     type="number"
+                                    inputMode="numeric"
+                                    pattern="[0-9]*"
                                     min={0}
                                     step={1}
                                     value={player.goalieCount}
@@ -379,7 +381,9 @@ export default function SoccerLineupGenerator() {
                                             parseInt(e.target.value) || 0
                                         );
                                         const updated = [...players];
-                                        updated[idx].goalieCount = val;
+                                        updated[idx].goalieCount = isNaN(val)
+                                            ? 0
+                                            : val;
                                         setPlayers(updated);
                                     }}
                                 />
@@ -392,6 +396,8 @@ export default function SoccerLineupGenerator() {
                                 </label>
                                 <input
                                     type="number"
+                                    inputMode="numeric"
+                                    pattern="[0-9]*"
                                     min={0}
                                     step={1}
                                     value={player.defenderCount}
@@ -402,7 +408,9 @@ export default function SoccerLineupGenerator() {
                                             parseInt(e.target.value) || 0
                                         );
                                         const updated = [...players];
-                                        updated[idx].defenderCount = val;
+                                        updated[idx].defenderCount = isNaN(val)
+                                            ? 0
+                                            : val;
                                         setPlayers(updated);
                                     }}
                                 />
@@ -415,6 +423,8 @@ export default function SoccerLineupGenerator() {
                                 </label>
                                 <input
                                     type="number"
+                                    inputMode="numeric"
+                                    pattern="[0-9]*"
                                     min={0}
                                     step={1}
                                     value={player.midfielderCount}
@@ -425,7 +435,11 @@ export default function SoccerLineupGenerator() {
                                             parseInt(e.target.value) || 0
                                         );
                                         const updated = [...players];
-                                        updated[idx].midfielderCount = val;
+                                        updated[idx].midfielderCount = isNaN(
+                                            val
+                                        )
+                                            ? 0
+                                            : val;
                                         setPlayers(updated);
                                     }}
                                 />
@@ -438,6 +452,8 @@ export default function SoccerLineupGenerator() {
                                 </label>
                                 <input
                                     type="number"
+                                    inputMode="numeric"
+                                    pattern="[0-9]*"
                                     min={0}
                                     step={1}
                                     value={player.forwardCount}
@@ -448,7 +464,9 @@ export default function SoccerLineupGenerator() {
                                             parseInt(e.target.value) || 0
                                         );
                                         const updated = [...players];
-                                        updated[idx].forwardCount = val;
+                                        updated[idx].forwardCount = isNaN(val)
+                                            ? 0
+                                            : val;
                                         setPlayers(updated);
                                     }}
                                 />
