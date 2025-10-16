@@ -166,6 +166,7 @@ export default function SoccerLineupGenerator() {
         numMidfielders: 2,
         numForwards: 1,
     });
+    const [showInstructions, setShowInstructions] = useState(true);
 
     useEffect(() => {
         const savedPlayers = localStorage.getItem("playersData");
@@ -288,10 +289,55 @@ export default function SoccerLineupGenerator() {
                     ))}
                 </div>
             </div>
+            <div className="p-4 border rounded mb-4">
+                <button
+                    className="font-semibold text-left w-full"
+                    onClick={() => setShowInstructions(!showInstructions)}
+                >
+                    {showInstructions
+                        ? "Hide Instructions ▲"
+                        : "Show Instructions ▼"}
+                </button>
+                {showInstructions && (
+                    <ol className="list-decimal list-inside space-y-1 mt-2 text-sm">
+                        <li>Enter each player's name in the text input.</li>
+                        <li>
+                            Set the number of quarters the player has played in
+                            each position (Goalie, Defender, Midfielder,
+                            Forward).
+                        </li>
+                        <li>
+                            Use the <strong>Active</strong> checkbox to include
+                            or exclude players from this game's lineup.
+                        </li>
+                        <li>
+                            Click <strong>+ Add Player</strong> to add more
+                            players.
+                        </li>
+                        <li>
+                            Once all players and positions are set, click{" "}
+                            <strong>Generate Lineup</strong> to create the game
+                            plan.
+                        </li>
+                        <li>
+                            The lineup will display by quarter. Substitutes are
+                            automatically added if there are extra players.
+                        </li>
+                        <li>
+                            Click <strong>Clear Saved Data</strong> to reset all
+                            players and lineups (you will be asked for
+                            confirmation).
+                        </li>
+                        <li>
+                            You can view previous game plans by clicking{" "}
+                            <strong>View Game History</strong>.
+                        </li>
+                    </ol>
+                )}
+            </div>
 
             <div className="space-y-4">
                 <h2 className="font-semibold text-lg">Players</h2>
-
                 {players.map((player, idx) => (
                     <div
                         key={idx}
