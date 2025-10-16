@@ -266,9 +266,9 @@ export default function SoccerLineupGenerator() {
             <div className="space-y-2">
                 <h2 className="font-semibold">Players</h2>
                 <div className="overflow-x-auto">
-                    <table className="w-full text-left border border-gray-300">
+                    <table className="w-full text-left border">
                         <thead>
-                            <tr className="bg-gray-100">
+                            <tr>
                                 <th className="p-2 text-sm sm:text-base">
                                     Name
                                 </th>
