@@ -214,6 +214,7 @@ export default function SoccerLineupGenerator() {
             forwardCount: 0,
             totalQuarters: 0,
             quartersThisGame: 0,
+            active: true,
         };
         setPlayers([...players, newPlayer]);
     }
@@ -444,10 +445,16 @@ export default function SoccerLineupGenerator() {
             </div>
 
             <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
-                <button className="bg-green-500 text-white px-3 py-1 rounded w-full sm:w-auto">
+                <button
+                    className="bg-green-500 text-white px-3 py-1 rounded w-full sm:w-auto"
+                    onClick={handleGenerate}
+                >
                     Generate Lineup
                 </button>
-                <button className="bg-red-500 text-white px-3 py-1 rounded w-full sm:w-auto">
+                <button
+                    className="bg-red-500 text-white px-3 py-1 rounded w-full sm:w-auto"
+                    onClick={handleClear}
+                >
                     Clear Saved Data
                 </button>
             </div>
@@ -529,9 +536,27 @@ export function GamePlanHistory() {
                                     Quarter {qIdx + 1}
                                 </h3>
                                 <ul>
-                                    {quarter.map((p, i) => (
-                                        <li key={i}>
-                                            {p.name} - {p.role}
+                                    {Object.entries(
+                                        quarter.reduce(
+                                            (
+                                                acc: Record<string, string[]>,
+                                                player
+                                            ) => {
+                                                if (!acc[player.role])
+                                                    acc[player.role] = [];
+                                                acc[player.role].push(
+                                                    player.name
+                                                );
+                                                return acc;
+                                            },
+                                            {}
+                                        )
+                                    ).map(([role, names]) => (
+                                        <li key={role}>
+                                            <span className="font-semibold">
+                                                {role}:
+                                            </span>{" "}
+                                            {names.join(", ")}
                                         </li>
                                     ))}
                                 </ul>
