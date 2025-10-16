@@ -266,197 +266,170 @@ export default function SoccerLineupGenerator() {
                 </div>
             </div>
 
-            <div className="space-y-2">
-                <h2 className="font-semibold">Players</h2>
-                <div className="overflow-x-auto">
-                    <table className="w-full text-left border ">
-                        <thead>
-                            <tr className="bg-purple-500">
-                                <th className="p-2 text-sm sm:text-base border-r">
-                                    Name
-                                </th>
-                                <th className="p-2 text-sm sm:text-base border-r">
+            <div className="space-y-4">
+                <h2 className="font-semibold text-lg">Players</h2>
+
+                {players.map((player, idx) => (
+                    <div
+                        key={idx}
+                        className={`border p-4 rounded space-y-3 ${
+                            player.active === false
+                                ? "bg-gray-100 text-gray-400"
+                                : ""
+                        }`}
+                    >
+                        {/* Player Name */}
+                        <input
+                            type="text"
+                            value={player.name}
+                            placeholder="Player Name"
+                            className="border p-2 w-full rounded"
+                            onChange={(e) => {
+                                const updated = [...players];
+                                updated[idx].name = e.target.value;
+                                setPlayers(updated);
+                            }}
+                        />
+
+                        {/* Position Counts */}
+                        <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+                            {/* Goalie */}
+                            <div className="flex flex-col">
+                                <label className="text-sm font-medium">
                                     Goalie
-                                </th>
-                                <th className="p-2 text-sm sm:text-base border-r">
+                                </label>
+                                <input
+                                    type="number"
+                                    min={0}
+                                    step={1}
+                                    value={player.goalieCount}
+                                    className="border p-2 text-center rounded w-full"
+                                    onChange={(e) => {
+                                        const val = Math.max(
+                                            0,
+                                            parseInt(e.target.value) || 0
+                                        );
+                                        const updated = [...players];
+                                        updated[idx].goalieCount = val;
+                                        setPlayers(updated);
+                                    }}
+                                />
+                            </div>
+
+                            {/* Defender */}
+                            <div className="flex flex-col">
+                                <label className="text-sm font-medium">
                                     Defender
-                                </th>
-                                <th className="p-2 text-sm sm:text-base border-r">
+                                </label>
+                                <input
+                                    type="number"
+                                    min={0}
+                                    step={1}
+                                    value={player.defenderCount}
+                                    className="border p-2 text-center rounded w-full"
+                                    onChange={(e) => {
+                                        const val = Math.max(
+                                            0,
+                                            parseInt(e.target.value) || 0
+                                        );
+                                        const updated = [...players];
+                                        updated[idx].defenderCount = val;
+                                        setPlayers(updated);
+                                    }}
+                                />
+                            </div>
+
+                            {/* Midfielder */}
+                            <div className="flex flex-col">
+                                <label className="text-sm font-medium">
                                     Midfielder
-                                </th>
-                                <th className="p-2 text-sm sm:text-base border-r">
+                                </label>
+                                <input
+                                    type="number"
+                                    min={0}
+                                    step={1}
+                                    value={player.midfielderCount}
+                                    className="border p-2 text-center rounded w-full"
+                                    onChange={(e) => {
+                                        const val = Math.max(
+                                            0,
+                                            parseInt(e.target.value) || 0
+                                        );
+                                        const updated = [...players];
+                                        updated[idx].midfielderCount = val;
+                                        setPlayers(updated);
+                                    }}
+                                />
+                            </div>
+
+                            {/* Forward */}
+                            <div className="flex flex-col">
+                                <label className="text-sm font-medium">
                                     Forward
-                                </th>
-                                <th className="p-2 text-sm sm:text-base border-r">
-                                    Total
-                                </th>
-                                <th className="p-2 text-sm sm:text-base border-r">
-                                    This Game
-                                </th>
-                                <th className="p-2 text-sm sm:text-base border-r">
-                                    Remove
-                                </th>
-                                <th className="p-2 text-sm sm:text-base border-r">
+                                </label>
+                                <input
+                                    type="number"
+                                    min={0}
+                                    step={1}
+                                    value={player.forwardCount}
+                                    className="border p-2 text-center rounded w-full"
+                                    onChange={(e) => {
+                                        const val = Math.max(
+                                            0,
+                                            parseInt(e.target.value) || 0
+                                        );
+                                        const updated = [...players];
+                                        updated[idx].forwardCount = val;
+                                        setPlayers(updated);
+                                    }}
+                                />
+                            </div>
+                        </div>
+
+                        {/* Active Toggle & Total */}
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center space-x-2">
+                                <input
+                                    type="checkbox"
+                                    checked={player.active ?? true}
+                                    onChange={(e) => {
+                                        const updated = [...players];
+                                        updated[idx].active = e.target.checked;
+                                        setPlayers(updated);
+                                    }}
+                                />
+                                <label className="text-sm font-medium">
                                     Active
-                                </th>
-                            </tr>
-                        </thead>
+                                </label>
+                            </div>
 
-                        <tbody>
-                            {players.map((p, idx) => (
-                                <tr
-                                    key={idx}
-                                    className={
-                                        p.active
-                                            ? ""
-                                            : "bg-gray-100 text-gray-400"
-                                    }
-                                >
-                                    <td className="p-2 text-center text-sm sm:text-base border-r">
-                                        <input
-                                            type="text"
-                                            inputMode="text"
-                                            autoComplete="off"
-                                            className="border p-1 w-25 sm:w-30 text-center"
-                                            value={p.name}
-                                            onChange={(e) => {
-                                                const updated = [...players];
-                                                updated[idx].name =
-                                                    e.target.value;
-                                                setPlayers(updated);
-                                            }}
-                                        />
-                                    </td>
-                                    <td className="p-2 text-center text-sm sm:text-base border-r">
-                                        <input
-                                            type="number"
-                                            inputMode="numeric"
-                                            pattern="[0-9]*"
-                                            className="border p-2 w-20 sm:w-16 text-center rounded"
-                                            value={p.goalieCount}
-                                            onChange={(e) => {
-                                                const val = Math.max(
-                                                    0,
-                                                    parseInt(e.target.value) ||
-                                                        0
-                                                );
-                                                const updated = [...players];
-                                                updated[idx].goalieCount = val;
-                                                setPlayers(updated);
-                                            }}
-                                        />
-                                    </td>
-                                    <td className="p-2 text-center text-sm sm:text-base border-r">
-                                        <input
-                                            type="number"
-                                            inputMode="numeric"
-                                            pattern="[0-9]*"
-                                            className="border p-2 w-20 sm:w-16 text-center rounded"
-                                            value={p.defenderCount}
-                                            onChange={(e) => {
-                                                const val = Math.max(
-                                                    0,
-                                                    parseInt(e.target.value) ||
-                                                        0
-                                                );
-                                                const updated = [...players];
-                                                updated[idx].defenderCount =
-                                                    val;
-                                                setPlayers(updated);
-                                            }}
-                                        />
-                                    </td>
-                                    <td className="p-2 text-center text-sm sm:text-base border-r">
-                                        <input
-                                            type="number"
-                                            inputMode="numeric"
-                                            pattern="[0-9]*"
-                                            className="border p-2 w-20 sm:w-16 text-center rounded"
-                                            value={p.midfielderCount}
-                                            onChange={(e) => {
-                                                const val = Math.max(
-                                                    0,
-                                                    parseInt(e.target.value) ||
-                                                        0
-                                                );
-                                                const updated = [...players];
-                                                updated[idx].midfielderCount =
-                                                    val;
-                                                setPlayers(updated);
-                                            }}
-                                        />
-                                    </td>
-                                    <td className="p-2 text-center text-sm sm:text-base border-r">
-                                        <input
-                                            type="number"
-                                            inputMode="numeric"
-                                            pattern="[0-9]*"
-                                            className="border p-2 w-20 sm:w-16 text-center rounded"
-                                            value={p.forwardCount}
-                                            onChange={(e) => {
-                                                const val = Math.max(
-                                                    0,
-                                                    parseInt(e.target.value) ||
-                                                        0
-                                                );
-                                                const updated = [...players];
-                                                updated[idx].forwardCount = val;
-                                                setPlayers(updated);
-                                            }}
-                                        />
-                                    </td>
-                                    <td className="p-2 text-center text-sm sm:text-base border-r">
-                                        {p.goalieCount +
-                                            p.defenderCount +
-                                            p.midfielderCount +
-                                            p.forwardCount}
-                                    </td>
-                                    <td
-                                        className={`p-2 text-center text-sm sm:text-base border-r ${
-                                            (p.quartersThisGame || 0) <
-                                            settings.minQuartersPerGame
-                                                ? "bg-yellow-100 text-yellow-700 font-semibold"
-                                                : ""
-                                        }`}
-                                    >
-                                        {p.quartersThisGame ?? 0}
-                                    </td>
+                            <div className="text-sm font-medium">
+                                Total:{" "}
+                                {player.goalieCount +
+                                    player.defenderCount +
+                                    player.midfielderCount +
+                                    player.forwardCount}
+                            </div>
 
-                                    <td className="p-2 text-center text-sm sm:text-base border-r">
-                                        <button
-                                            className="text-red-600"
-                                            onClick={() =>
-                                                handleRemovePlayer(idx)
-                                            }
-                                        >
-                                            ✕
-                                        </button>
-                                    </td>
-                                    <td className="p-2 text-center text-sm sm:text-base border-r">
-                                        <input
-                                            type="checkbox"
-                                            checked={p.active ?? true}
-                                            onChange={(e) => {
-                                                const updated = [...players];
-                                                updated[idx].active =
-                                                    e.target.checked;
-                                                setPlayers(updated);
-                                            }}
-                                        />
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
+                            {/* Remove Player */}
+                            <button
+                                className="text-red-600 font-bold text-lg"
+                                onClick={() => handleRemovePlayer(idx)}
+                            >
+                                ✕
+                            </button>
+                        </div>
+                    </div>
+                ))}
+
+                {/* Add Player Button */}
                 <button
-                    className="bg-blue-500 text-white px-3 py-1 rounded"
+                    className="bg-blue-500 text-white px-4 py-2 rounded w-full sm:w-auto"
                     onClick={handleAddPlayer}
                 >
                     + Add Player
                 </button>
             </div>
-
             <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
                 <button
                     className="bg-green-500 text-white px-3 py-1 rounded w-full sm:w-auto"
