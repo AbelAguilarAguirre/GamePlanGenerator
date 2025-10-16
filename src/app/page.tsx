@@ -19,6 +19,15 @@ interface LineupResult {
     updatedPlayers: Player[];
 }
 
+interface LineupSettings {
+    maxQuartersPerGame: number;
+    minQuartersPerGame: number;
+    numGoalies: number;
+    numDefenders: number;
+    numMidfielders: number;
+    numForwards: number;
+}
+
 const defaultPlayers: Player[] = [
     {
         name: "Player Name",
@@ -83,7 +92,10 @@ function choosePlayer(
     return chosen;
 }
 
-function createLineup(players: Player[], settings: any): LineupResult {
+function createLineup(
+    players: Player[],
+    settings: LineupSettings
+): LineupResult {
     const {
         maxQuartersPerGame,
         minQuartersPerGame,
