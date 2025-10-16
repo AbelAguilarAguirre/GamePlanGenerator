@@ -130,10 +130,10 @@ function createLineup(
             }
         };
 
-        assignRole("goalieCount", "Goalie", numGoalies);
-        assignRole("defenderCount", "Defender", numDefenders);
-        assignRole("midfielderCount", "Midfielder", numMidfielders);
-        assignRole("forwardCount", "Forward", numForwards);
+        assignRole("goalieCount", "Goalie", settings.numGoalies);
+        assignRole("defenderCount", "Defender", settings.numDefenders);
+        assignRole("midfielderCount", "Midfielder", settings.numMidfielders);
+        assignRole("forwardCount", "Forward", settings.numForwards);
 
         while (quarterLineup.length < playersCopy.length) {
             const sub = choosePlayer(
@@ -184,9 +184,32 @@ export default function SoccerLineupGenerator() {
     }, [players, lineup, settings]);
 
     function handleGenerate() {
-        const result = createLineup(players, settings);
+        const activePlayers = players.filter((p) => p.active !== false); // only include active players
+        const totalRequired =
+            settings.numGoalies +
+            settings.numDefenders +
+            settings.numMidfielders +
+            settings.numForwards;
+
+        if (activePlayers.length < totalRequired) {
+            alert(
+                `Not enough players to generate a lineup! You need at least ${totalRequired} active players.`
+            );
+            return;
+        }
+
+        const result = createLineup(activePlayers, {
+            maxQuartersPerGame: settings.maxQuartersPerGame,
+            minQuartersPerGame: settings.minQuartersPerGame,
+            numGoalies: settings.numGoalies,
+            numDefenders: settings.numDefenders,
+            numMidfielders: settings.numMidfielders,
+            numForwards: settings.numForwards,
+        });
+
         setPlayers(result.updatedPlayers);
         setLineup(result.plan);
+
         const history = JSON.parse(
             localStorage.getItem("gamePlanHistory") || "[]"
         );
@@ -294,7 +317,7 @@ export default function SoccerLineupGenerator() {
                         {/* Position Counts */}
                         <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
                             {/* Goalie */}
-                            <div className="flex flex-col">
+                            <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-2">
                                 <label className="text-sm font-medium">
                                     Goalie
                                 </label>
@@ -303,7 +326,7 @@ export default function SoccerLineupGenerator() {
                                     min={0}
                                     step={1}
                                     value={player.goalieCount}
-                                    className="border p-2 text-center rounded w-full"
+                                    className="border p-2 text-center rounded w-full sm:w-16"
                                     onChange={(e) => {
                                         const val = Math.max(
                                             0,
@@ -317,7 +340,7 @@ export default function SoccerLineupGenerator() {
                             </div>
 
                             {/* Defender */}
-                            <div className="flex flex-col">
+                            <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-2">
                                 <label className="text-sm font-medium">
                                     Defender
                                 </label>
@@ -326,7 +349,7 @@ export default function SoccerLineupGenerator() {
                                     min={0}
                                     step={1}
                                     value={player.defenderCount}
-                                    className="border p-2 text-center rounded w-full"
+                                    className="border p-2 text-center rounded w-full sm:w-16"
                                     onChange={(e) => {
                                         const val = Math.max(
                                             0,
@@ -340,7 +363,7 @@ export default function SoccerLineupGenerator() {
                             </div>
 
                             {/* Midfielder */}
-                            <div className="flex flex-col">
+                            <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-2">
                                 <label className="text-sm font-medium">
                                     Midfielder
                                 </label>
@@ -349,7 +372,7 @@ export default function SoccerLineupGenerator() {
                                     min={0}
                                     step={1}
                                     value={player.midfielderCount}
-                                    className="border p-2 text-center rounded w-full"
+                                    className="border p-2 text-center rounded w-full sm:w-16"
                                     onChange={(e) => {
                                         const val = Math.max(
                                             0,
@@ -363,7 +386,7 @@ export default function SoccerLineupGenerator() {
                             </div>
 
                             {/* Forward */}
-                            <div className="flex flex-col">
+                            <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-2">
                                 <label className="text-sm font-medium">
                                     Forward
                                 </label>
@@ -372,7 +395,7 @@ export default function SoccerLineupGenerator() {
                                     min={0}
                                     step={1}
                                     value={player.forwardCount}
-                                    className="border p-2 text-center rounded w-full"
+                                    className="border p-2 text-center rounded w-full sm:w-16"
                                     onChange={(e) => {
                                         const val = Math.max(
                                             0,
