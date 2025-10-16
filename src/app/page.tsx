@@ -268,32 +268,32 @@ export default function SoccerLineupGenerator() {
                 <div className="overflow-x-auto">
                     <table className="w-full text-left border ">
                         <thead>
-                            <tr className="bg-gray-900">
-                                <th className="p-2 text-sm sm:text-base">
+                            <tr className="bg-purple-500">
+                                <th className="p-2 text-sm sm:text-base border-r">
                                     Name
                                 </th>
-                                <th className="p-2 text-sm sm:text-base">
+                                <th className="p-2 text-sm sm:text-base border-r">
                                     Goalie
                                 </th>
-                                <th className="p-2 text-sm sm:text-base">
+                                <th className="p-2 text-sm sm:text-base border-r">
                                     Defender
                                 </th>
-                                <th className="p-2 text-sm sm:text-base">
+                                <th className="p-2 text-sm sm:text-base border-r">
                                     Midfielder
                                 </th>
-                                <th className="p-2 text-sm sm:text-base">
+                                <th className="p-2 text-sm sm:text-base border-r">
                                     Forward
                                 </th>
-                                <th className="p-2 text-sm sm:text-base">
+                                <th className="p-2 text-sm sm:text-base border-r">
                                     Total
                                 </th>
-                                <th className="p-2 text-sm sm:text-base">
+                                <th className="p-2 text-sm sm:text-base border-r">
                                     This Game
                                 </th>
-                                <th className="p-2 text-sm sm:text-base">
+                                <th className="p-2 text-sm sm:text-base border-r">
                                     Remove
                                 </th>
-                                <th className="p-2 text-sm sm:text-base">
+                                <th className="p-2 text-sm sm:text-base border-r">
                                     Active
                                 </th>
                             </tr>
@@ -309,9 +309,9 @@ export default function SoccerLineupGenerator() {
                                             : "bg-gray-100 text-gray-400"
                                     }
                                 >
-                                    <td className="p-2 text-center text-sm sm:text-base">
+                                    <td className="p-2 text-center text-sm sm:text-base border-r">
                                         <input
-                                            className="border p-1 w-12 sm:w-16 text-center"
+                                            className="border p-1 w-25 sm:w-30 text-center"
                                             value={p.name}
                                             onChange={(e) => {
                                                 const updated = [...players];
@@ -321,7 +321,7 @@ export default function SoccerLineupGenerator() {
                                             }}
                                         />
                                     </td>
-                                    <td className="p-2 text-center text-sm sm:text-base">
+                                    <td className="p-2 text-center text-sm sm:text-base border-r">
                                         <input
                                             type="number"
                                             className="border p-1 w-12 sm:w-16 text-center"
@@ -338,7 +338,7 @@ export default function SoccerLineupGenerator() {
                                             }}
                                         />
                                     </td>
-                                    <td className="p-2 text-center text-sm sm:text-base">
+                                    <td className="p-2 text-center text-sm sm:text-base border-r">
                                         <input
                                             type="number"
                                             className="border p-1 w-12 sm:w-16 text-center"
@@ -356,7 +356,7 @@ export default function SoccerLineupGenerator() {
                                             }}
                                         />
                                     </td>
-                                    <td className="p-2 text-center text-sm sm:text-base">
+                                    <td className="p-2 text-center text-sm sm:text-base border-r">
                                         <input
                                             type="number"
                                             className="border p-1 w-12 sm:w-16 text-center"
@@ -374,7 +374,7 @@ export default function SoccerLineupGenerator() {
                                             }}
                                         />
                                     </td>
-                                    <td className="p-2 text-center text-sm sm:text-base">
+                                    <td className="p-2 text-center text-sm sm:text-base border-r">
                                         <input
                                             type="number"
                                             className="border p-1 w-12 sm:w-16 text-center"
@@ -391,14 +391,14 @@ export default function SoccerLineupGenerator() {
                                             }}
                                         />
                                     </td>
-                                    <td className="p-2 text-center text-sm sm:text-base">
+                                    <td className="p-2 text-center text-sm sm:text-base border-r">
                                         {p.goalieCount +
                                             p.defenderCount +
                                             p.midfielderCount +
                                             p.forwardCount}
                                     </td>
                                     <td
-                                        className={`p-2 text-center text-sm sm:text-base ${
+                                        className={`p-2 text-center text-sm sm:text-base border-r ${
                                             (p.quartersThisGame || 0) <
                                             settings.minQuartersPerGame
                                                 ? "bg-yellow-100 text-yellow-700 font-semibold"
@@ -408,7 +408,7 @@ export default function SoccerLineupGenerator() {
                                         {p.quartersThisGame ?? 0}
                                     </td>
 
-                                    <td className="p-2 text-center text-sm sm:text-base">
+                                    <td className="p-2 text-center text-sm sm:text-base border-r">
                                         <button
                                             className="text-red-600"
                                             onClick={() =>
@@ -418,7 +418,7 @@ export default function SoccerLineupGenerator() {
                                             ✕
                                         </button>
                                     </td>
-                                    <td className="p-2 text-center text-sm sm:text-base">
+                                    <td className="p-2 text-center text-sm sm:text-base border-r">
                                         <input
                                             type="checkbox"
                                             checked={p.active ?? true}
