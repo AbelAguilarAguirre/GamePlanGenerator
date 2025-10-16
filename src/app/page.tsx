@@ -96,14 +96,7 @@ function createLineup(
     players: Player[],
     settings: LineupSettings
 ): LineupResult {
-    const {
-        maxQuartersPerGame,
-        minQuartersPerGame,
-        numGoalies,
-        numDefenders,
-        numMidfielders,
-        numForwards,
-    } = settings;
+    const { maxQuartersPerGame, minQuartersPerGame } = settings;
 
     const playersCopy = players.map((p) => ({ ...p, quartersThisGame: 0 }));
     const gamePlan: { name: string; role: string }[][] = [];
