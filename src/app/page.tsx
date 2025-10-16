@@ -353,6 +353,7 @@ export default function SoccerLineupGenerator() {
                                 updated[idx].name = e.target.value;
                                 setPlayers(updated);
                             }}
+                            onFocus={(e) => e.target.select()}
                         />
 
                         {/* Position Counts */}
@@ -381,6 +382,7 @@ export default function SoccerLineupGenerator() {
                                             : val;
                                         setPlayers(updated);
                                     }}
+                                    onFocus={(e) => e.target.select()}
                                 />
                             </div>
 
@@ -408,6 +410,7 @@ export default function SoccerLineupGenerator() {
                                             : val;
                                         setPlayers(updated);
                                     }}
+                                    onFocus={(e) => e.target.select()}
                                 />
                             </div>
 
@@ -437,6 +440,7 @@ export default function SoccerLineupGenerator() {
                                             : val;
                                         setPlayers(updated);
                                     }}
+                                    onFocus={(e) => e.target.select()}
                                 />
                             </div>
 
@@ -464,6 +468,7 @@ export default function SoccerLineupGenerator() {
                                             : val;
                                         setPlayers(updated);
                                     }}
+                                    onFocus={(e) => e.target.select()}
                                 />
                             </div>
                         </div>
