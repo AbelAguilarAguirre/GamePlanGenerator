@@ -26,7 +26,7 @@ const NUM_MIDFIELDERS = 2;
 const NUM_FORWARDS = 1;
 
 
-function pickPlayer(players, index, alreadyChosen) {
+function selectPlayerForRole(players, index, alreadyChosen) {
     let pool = players.filter(p => !alreadyChosen.includes(p[0]));
     // prefer players with lower count for the requested index, then lower total quarters, then lower per-game count
     pool.sort((a, b) => {
@@ -40,9 +40,13 @@ function pickPlayer(players, index, alreadyChosen) {
     let notMaxed = pool.filter(p => p[6] < MAX_PER_GAME);
     pool = notMaxed.length > 0 ? notMaxed : players.filter(p => !alreadyChosen.includes(p[0]));
 
-    if (pool.length === 0) return null; // no available players
+    return pool.length === 0 ? null : pool[0];
+}
 
-    let player = pool[0];
+function pickPlayer(players, index, alreadyChosen) {
+    let player = selectPlayerForRole(players, index, alreadyChosen);
+    if (!player) return null; // no available players
+
     // If index is 5 (substitute), do not change any counters — substitutes are only for display
     if (index >= 1 && index <= 4) {
         player[index]++;
@@ -58,10 +62,34 @@ function createLineup(players) {
     let playersCopy = players.map(p => [...p, 0]);
 
     let plan = [];
+    let goalieByQuarter = new Map();
+    let usedGoalies = new Set();
+
+    // Keep the same goalie for Q1 and Q2, and a different goalie for Q3 and Q4.
+    for (let pair of [[1, 2], [3, 4]]) {
+        let goalie = selectPlayerForRole(playersCopy, 1, [...usedGoalies]);
+        if (goalie) {
+            usedGoalies.add(goalie[0]);
+            goalieByQuarter.set(pair[0], goalie[0]);
+            goalieByQuarter.set(pair[1], goalie[0]);
+        }
+    }
 
     for (let q = 1; q <= 4; q++) {
         let quarterLineup = [];
         let chosenNames = [];
+
+        const goalieName = goalieByQuarter.get(q);
+        if (goalieName) {
+            const goaliePlayer = playersCopy.find(p => p[0] === goalieName);
+            if (goaliePlayer) {
+                goaliePlayer[1]++;
+                goaliePlayer[5]++;
+                goaliePlayer[6]++;
+            }
+            quarterLineup.push([goalieName, "Goalie"]);
+            chosenNames.push(goalieName);
+        }
 
         function addSpot(index, role, count) {
             for (let i = 0; i < count; i++) {
@@ -70,7 +98,6 @@ function createLineup(players) {
             }
         }
 
-        addSpot(1, "Goalie", NUM_GOALIES);
         addSpot(2, "Defender", NUM_DEFENDERS);
         addSpot(3, "Midfielder", NUM_MIDFIELDERS);
         addSpot(4, "Forward", NUM_FORWARDS);
