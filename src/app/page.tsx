@@ -45,27 +45,44 @@ function choosePlayer(
     positionKey: keyof Player,
     chosenNames: string[],
     maxQuartersPerGame: number,
-    minQuartersPerGame: number
+    minQuartersPerGame: number,
+    preferredRole?: string,
+    previousQuarterRoles: Record<string, string> = {}
 ): Player | null {
     let availablePlayers = players.filter(
         (p) => !chosenNames.includes(p.name) && p.active !== false
     );
 
-    // Prioritize players below their minimum quarters
+    if (preferredRole) {
+        const sameRolePlayers = availablePlayers.filter(
+            (p) => previousQuarterRoles[p.name] === preferredRole
+        );
+        if (sameRolePlayers.length > 0) {
+            availablePlayers = sameRolePlayers;
+        }
+    }
+
     const underMin = availablePlayers.filter(
         (p) => (p.quartersThisGame || 0) < minQuartersPerGame
     );
+    if (underMin.length > 0) availablePlayers = underMin;
 
-    // Sort by fewest total games in this position, then fewest total quarters
     const sortPlayers = (a: Player, b: Player) => {
+        if (preferredRole) {
+            const aSameRole = previousQuarterRoles[a.name] === preferredRole ? 0 : 1;
+            const bSameRole = previousQuarterRoles[b.name] === preferredRole ? 0 : 1;
+            if (aSameRole !== bSameRole) return aSameRole - bSameRole;
+        }
+
         let diff = (a[positionKey] as number) - (b[positionKey] as number);
         if (diff !== 0) return diff;
         diff = a.totalQuarters - b.totalQuarters;
         if (diff !== 0) return diff;
+        diff = (a.quartersThisGame || 0) - (b.quartersThisGame || 0);
+        if (diff !== 0) return diff;
         return a.name.localeCompare(b.name);
     };
 
-    if (underMin.length > 0) availablePlayers = underMin;
     availablePlayers.sort(sortPlayers);
 
     const eligible = availablePlayers.filter(
@@ -100,10 +117,59 @@ function createLineup(
 
     const playersCopy = players.map((p) => ({ ...p, quartersThisGame: 0 }));
     const gamePlan: { name: string; role: string }[][] = [];
+    const goalieByQuarter: Record<number, string> = {};
+    const usedGoalies = new Set<string>();
+
+    const chooseGoalieForPair = (pairQuarter: 1 | 3) => {
+        if (goalieByQuarter[pairQuarter]) return goalieByQuarter[pairQuarter];
+
+        const goaliePool = [...playersCopy]
+            .filter((p) => !usedGoalies.has(p.name) && p.active !== false)
+            .sort((a, b) => {
+                const aSameRole = a.goalieCount === 0 ? 0 : 1;
+                const bSameRole = b.goalieCount === 0 ? 0 : 1;
+                if (aSameRole !== bSameRole) return aSameRole - bSameRole;
+                const diff = a.goalieCount - b.goalieCount;
+                if (diff !== 0) return diff;
+                return a.totalQuarters - b.totalQuarters;
+            });
+
+        const goalie = goaliePool[0];
+        if (!goalie) return null;
+
+        usedGoalies.add(goalie.name);
+        goalieByQuarter[pairQuarter] = goalie.name;
+        goalieByQuarter[pairQuarter + 1] = goalie.name;
+        return goalie.name;
+    };
 
     for (let quarter = 1; quarter <= 4; quarter++) {
         const quarterLineup: { name: string; role: string }[] = [];
         const chosenNames: string[] = [];
+        const previousQuarterRoles: Record<string, string> =
+            quarter === 1 ? {} : gamePlan[quarter - 2].reduce(
+                (acc, player) => {
+                    acc[player.name] = player.role;
+                    return acc;
+                },
+                {} as Record<string, string>
+            );
+
+        if (quarter === 1 || quarter === 3) {
+            chooseGoalieForPair(quarter as 1 | 3);
+        }
+
+        const goalieName = goalieByQuarter[quarter];
+        if (goalieName) {
+            const goalie = playersCopy.find((p) => p.name === goalieName);
+            if (goalie) {
+                goalie.goalieCount++;
+                goalie.totalQuarters++;
+                goalie.quartersThisGame = (goalie.quartersThisGame || 0) + 1;
+                chosenNames.push(goalie.name);
+                quarterLineup.push({ name: goalie.name, role: "Goalie" });
+            }
+        }
 
         const assignRole = (
             roleKey: keyof Player,
@@ -116,14 +182,15 @@ function createLineup(
                     roleKey,
                     chosenNames,
                     maxQuartersPerGame,
-                    minQuartersPerGame
+                    minQuartersPerGame,
+                    roleName,
+                    previousQuarterRoles
                 );
                 if (player)
                     quarterLineup.push({ name: player.name, role: roleName });
             }
         };
 
-        assignRole("goalieCount", "Goalie", settings.numGoalies);
         assignRole("defenderCount", "Defender", settings.numDefenders);
         assignRole("midfielderCount", "Midfielder", settings.numMidfielders);
         assignRole("forwardCount", "Forward", settings.numForwards);
@@ -134,7 +201,9 @@ function createLineup(
                 "totalQuarters",
                 chosenNames,
                 maxQuartersPerGame,
-                minQuartersPerGame
+                minQuartersPerGame,
+                "Substitute",
+                previousQuarterRoles
             );
             if (!sub) break;
             quarterLineup.push({ name: sub.name, role: "Substitute" });
